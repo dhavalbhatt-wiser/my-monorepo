@@ -1,0 +1,108 @@
+{
+  "name": "frontend-helloworld",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/frontend/helloworld/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/frontend/helloworld",
+        "index": "apps/frontend/helloworld/src/index.html",
+        "baseHref": "/",
+        "main": "apps/frontend/helloworld/src/main.ts",
+        "tsConfig": "apps/frontend/helloworld/tsconfig.app.json",
+        "assets": [
+          "apps/frontend/helloworld/src/favicon.ico",
+          "apps/frontend/helloworld/src/assets"
+        ],
+        "styles": ["apps/frontend/helloworld/src/styles.css"],
+        "scripts": [],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/frontend/helloworld/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/frontend/helloworld/src/environments/environment.ts",
+              "with": "apps/frontend/helloworld/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/frontend/helloworld/webpack.config.prod.js"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "frontend-helloworld:build",
+        "hmr": true,
+        "port": 4201
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "frontend-helloworld:build:development"
+        },
+        "production": {
+          "buildTarget": "frontend-helloworld:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/frontend/helloworld/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "frontend-helloworld:build",
+        "port": 4201
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "frontend-helloworld:build:development"
+        },
+        "production": {
+          "buildTarget": "frontend-helloworld:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/frontend/helloworld/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
