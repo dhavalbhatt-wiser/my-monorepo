@@ -5,8 +5,8 @@ import NxWelcome from './nx-welcome';
 
 export function App() {
   return (
-    <div>
-      <h1>My simple hello world</h1>
+    <div className='content'>
+      <h1 className='contenth1'>My simple hello world</h1>
     </div>
   );
 }
